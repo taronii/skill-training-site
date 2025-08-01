@@ -23,7 +23,7 @@
 ### 初期設定
 ```bash
 # リポジトリのクローン
-git clone https://github.com/your-username/skill-training-site.git
+git clone https://github.com/taronii/skill-training-site.git
 cd skill-training-site
 
 # 依存関係のインストール
@@ -121,7 +121,7 @@ npm run dev
 
 1. **リポジトリのクローン**
    ```bash
-   git clone https://github.com/your-username/skill-training-site.git
+   git clone https://github.com/taronii/skill-training-site.git
    cd skill-training-site
    ```
 
@@ -225,7 +225,7 @@ MIT License
 
 ## 📞 サポート
 
-問題がある場合は、[Issues](https://github.com/your-username/skill-training-site/issues)に詳細を記載してください。
+問題がある場合は、[Issues](https://github.com/taronii/skill-training-site/issues)に詳細を記載してください。
 
 ## データベース構造
 
@@ -548,7 +548,7 @@ seedスクリプトにより以下のデータが投入されます：
    git init
    git add .
    git commit -m "Initial commit"
-   git remote add origin https://github.com/your-username/skill-training-site.git
+   git remote add origin https://github.com/taronii/skill-training-site.git
    git push -u origin main
    ```
 
