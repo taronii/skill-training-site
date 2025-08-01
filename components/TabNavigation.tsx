@@ -1,3 +1,5 @@
+import React from 'react'
+
 type Tab = 'latest' | 'popular' | 'pinned'
 
 interface TabNavigationProps {
@@ -6,7 +8,7 @@ interface TabNavigationProps {
 }
 
 export default function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
-  const tabs: { id: Tab; label: string; icon: JSX.Element }[] = [
+  const tabs: { id: Tab; label: string; icon: React.ReactElement }[] = [
     {
       id: 'latest',
       label: '新着',
