@@ -2,11 +2,6 @@
   "framework": "nextjs",
   "buildCommand": "prisma generate && prisma migrate deploy && next build",
   "installCommand": "npm install",
-  "env": {
-    "DATABASE_URL": "@database_url",
-    "JWT_SECRET": "@jwt_secret",
-    "NEXT_PUBLIC_APP_URL": "@app_url"
-  },
   "functions": {
     "app/api/*": {
       "maxDuration": 10
