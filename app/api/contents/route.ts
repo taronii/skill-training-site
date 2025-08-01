@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || ''
 
     // 基本的なwhere条件
-    let where: any = {}
+    const where: Record<string, any> = {}
     
     // カテゴリーフィルター
     if (category !== 'all') {
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
     
     // タブに応じたソートとフィルター
-    let orderBy: any = {}
+    let orderBy: Record<string, string> = {}
     
     switch (tab) {
       case 'latest':

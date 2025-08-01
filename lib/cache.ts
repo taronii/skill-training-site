@@ -4,7 +4,7 @@ import { prisma } from './prisma'
 // コンテンツ一覧のキャッシュ
 export const getCachedContents = unstable_cache(
   async (tab?: string, category?: string, search?: string) => {
-    const where: any = {
+    const where: Record<string, any> = {
       publishedAt: {
         not: null,
         lte: new Date(),
@@ -26,7 +26,7 @@ export const getCachedContents = unstable_cache(
       where.isPinned = true
     }
 
-    let orderBy: any = {}
+    let orderBy: Record<string, string> = {}
     if (tab === 'popular') {
       orderBy = { viewCount: 'desc' }
     } else {
