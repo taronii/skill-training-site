@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // カテゴリー更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const { name, slug, order } = await request.json()
 
     // スラッグの重複チェック（自分以外）
@@ -49,10 +49,10 @@ export async function PUT(
 // カテゴリー部分更新（順序変更用）
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const data = await request.json()
 
     const category = await prisma.category.update({
@@ -73,10 +73,10 @@ export async function PATCH(
 // カテゴリー削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     // コンテンツが存在するかチェック
     const contentCount = await prisma.content.count({

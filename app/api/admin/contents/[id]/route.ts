@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // コンテンツ取得
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const content = await prisma.content.findUnique({
       where: { id },
@@ -36,10 +36,10 @@ export async function GET(
 // コンテンツ更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const data = await request.json()
 
     const content = await prisma.content.update({
@@ -66,10 +66,10 @@ export async function PUT(
 // コンテンツ部分更新（ピン留め等）
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
     const data = await request.json()
 
     const content = await prisma.content.update({
@@ -90,10 +90,10 @@ export async function PATCH(
 // コンテンツ削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await prisma.content.delete({
       where: { id },

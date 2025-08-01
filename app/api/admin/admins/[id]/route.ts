@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // 管理者削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     // 最後の管理者かチェック
     const adminCount = await prisma.admin.count()

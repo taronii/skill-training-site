@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // 合言葉削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     // 合言葉削除
     await prisma.passPhrase.delete({
