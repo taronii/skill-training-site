@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 合言葉モデル
+model PassPhrase {
+  id        String   @id @default(cuid())
+  phrase    String   @unique
+  month     Int
+  year      Int
+  createdAt DateTime @default(now())
+
+  @@unique([month, year])
+}
+
+// 管理者モデル
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+// カテゴリーモデル
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  contents  Content[]
+}
+
+// コンテンツタイプ
+enum ContentType {
+  VIDEO
+  ARTICLE
+}
+
+// コンテンツモデル
+model Content {
+  id             String      @id @default(cuid())
+  title          String
+  type           ContentType
+  youtubeUrl     String?
+  articleContent String?
+  thumbnail      String?
+  categoryId     String
+  category       Category    @relation(fields: [categoryId], references: [id])
+  viewCount      Int         @default(0)
+  isPinned       Boolean     @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime    @default(now())
+
+  @@index([categoryId])
+  @@index([publishedAt])
+}
+
+// セッションモデル
+model Session {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  validUntil DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([token])
+}
