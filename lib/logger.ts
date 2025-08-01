@@ -74,11 +74,11 @@ class Logger {
   }
 
   // パフォーマンスメトリクスを記録
-  logPerformance(operation: string, duration: number, metadata?: unknown) {
+  logPerformance(operation: string, duration: number, metadata?: Record<string, unknown>) {
     this.info('Performance Metric', {
       operation,
       duration,
-      ...metadata,
+      ...(metadata || {}),
     })
   }
 }
