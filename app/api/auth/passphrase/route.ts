@@ -5,9 +5,12 @@ import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('[Auth] Passphrase authentication request received')
+    
     const { passphrase } = await request.json()
 
     if (!passphrase) {
+      console.log('[Auth] No passphrase provided')
       return NextResponse.json(
         { error: '合言葉を入力してください' },
         { status: 400 }
@@ -18,6 +21,8 @@ export async function POST(request: NextRequest) {
     const now = new Date()
     const currentMonth = now.getMonth() + 1
     const currentYear = now.getFullYear()
+    
+    console.log('[Auth] Checking passphrase for:', { currentMonth, currentYear })
 
     // 合言葉を検証
     const validPassPhrase = await prisma.passPhrase.findFirst({
@@ -27,6 +32,8 @@ export async function POST(request: NextRequest) {
         year: currentYear,
       },
     })
+    
+    console.log('[Auth] Passphrase validation result:', validPassPhrase ? 'Valid' : 'Invalid')
 
     if (!validPassPhrase) {
       return NextResponse.json(
@@ -71,7 +78,11 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error('Authentication error:', error)
+    console.error('[Auth] Authentication error:', error)
+    console.error('[Auth] Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    })
     return NextResponse.json(
       { error: 'サーバーエラーが発生しました' },
       { status: 500 }
