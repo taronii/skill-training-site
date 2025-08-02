@@ -41,6 +41,10 @@ export default function ContentCard({ content }: ContentCardProps) {
               alt={content.title}
               fill
               className="object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = '/thumbnails/placeholder.svg'
+              }}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
