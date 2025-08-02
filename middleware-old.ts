@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { jwtVerify } from 'jose'
+import jwt from 'jsonwebtoken'
 import { apiRateLimit } from './lib/rate-limit'
 
 // 保護されたルートのパス
@@ -58,15 +58,12 @@ export async function middleware(request: NextRequest) {
     }
     
     try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
-      const { payload } = await jwtVerify(adminToken, secret) as {
-        payload: {
-          adminId: string
-          isAdmin: boolean
-        }
+      const decoded = jwt.verify(adminToken, process.env.JWT_SECRET!) as {
+        adminId: string
+        isAdmin: boolean
       }
       
-      if (!payload.isAdmin) {
+      if (!decoded.isAdmin) {
         const url = request.nextUrl.clone()
         url.pathname = '/admin/login'
         return NextResponse.redirect(url)
@@ -74,7 +71,6 @@ export async function middleware(request: NextRequest) {
       
       return response
     } catch (error) {
-      console.error('[Middleware] Admin token verification failed:', error)
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       const response = NextResponse.redirect(url)
@@ -94,7 +90,6 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value
 
   if (!token) {
-    console.log('[Middleware] No auth token found for protected path:', pathname)
     // トークンがない場合はログインページへリダイレクト
     const url = request.nextUrl.clone()
     url.pathname = '/login'
@@ -103,20 +98,16 @@ export async function middleware(request: NextRequest) {
 
   try {
     // トークンを検証
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
-    const { payload } = await jwtVerify(token, secret) as {
-      payload: {
-        authenticated: boolean
-        validUntil: string
-      }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      authenticated: boolean
+      validUntil: string
     }
 
     // 有効期限をチェック
-    const validUntil = new Date(payload.validUntil)
+    const validUntil = new Date(decoded.validUntil)
     const now = new Date()
     
     if (now > validUntil) {
-      console.log('[Middleware] Token expired:', { validUntil, now })
       // 有効期限切れの場合はログインページへリダイレクト
       const url = request.nextUrl.clone()
       url.pathname = '/login'
@@ -127,11 +118,9 @@ export async function middleware(request: NextRequest) {
       return response
     }
 
-    console.log('[Middleware] Authentication successful for:', pathname)
     // 認証成功
     return response
   } catch (error) {
-    console.error('[Middleware] Token verification failed:', error)
     // トークンが無効な場合はログインページへリダイレクト
     const url = request.nextUrl.clone()
     url.pathname = '/login'
